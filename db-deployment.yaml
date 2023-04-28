@@ -26,13 +26,11 @@ spec:
           ports:
             # Assign ports to expose container
             - containerPort: 5432
-          env:
-             - name: POSTGRES_DB
-               value: vehicle_quotes
-             - name: POSTGRES_USER
-               value: vehicle_quotes
-             - name: POSTGRES_PASSWORD
-               value: password
+          envFrom:
+            # Load the environment variables/PostgresSQL credentials
+            - configMapRef:
+                # This should be the ConfigMap name created ealier
+                name: db-secret-credentials
           volumeMounts:
             # The volume mounts  for the container
             - mountPath: /var/lib/postgres/data
@@ -42,4 +40,4 @@ spec:
         - name: db-data
           persistentVolumeClaim:
             # reference the PersistentVolumeClaim
-            claimName: vehicle-quotes-postgres-data-persisent-volume-claim
+            claimName: db-persistent-volume-claim
